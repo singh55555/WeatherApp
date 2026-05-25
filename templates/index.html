@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="weather-card">
+        <h1>Current Weather</h1>
+
+        <form method="post" class="city-form">
+          <label for="city">Enter city name</label>
+          <div class="input-row">
+            <input
+              id="city"
+              name="city"
+              type="text"
+              placeholder="e.g. London"
+              value="{{ city }}"
+              required
+            />
+            <button type="submit">Search</button>
+          </div>
+
+          <div class="options-row">
+            <label>
+              <input type="radio" name="units" value="metric" {% if units == 'metric' %}checked{% endif %} />
+              Celsius
+            </label>
+            <label>
+              <input type="radio" name="units" value="imperial" {% if units == 'imperial' %}checked{% endif %} />
+              Fahrenheit
+            </label>
+          </div>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% if weather %}
+          <div class="result">
+            <div class="result-header">
+              <div>
+                <h2>{{ weather.city }}, {{ weather.country }}</h2>
+                <p class="description">{{ weather.description | title }}</p>
+              </div>
+              <img
+                src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+                alt="Weather icon"
+              />
+            </div>
+
+            <div class="temperature">
+              <span>{{ weather.temperature | round(1) }}</span>
+              <small>{{ '°C' if weather.units == 'metric' else '°F' }}</small>
+            </div>
+
+            <div class="details">
+              <div><strong>Humidity</strong><span>{{ weather.humidity }}%</span></div>
+              <div><strong>Wind</strong><span>{{ weather.wind_speed }} {{ 'm/s' if weather.units == 'metric' else 'mph' }}</span></div>
+            </div>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>
