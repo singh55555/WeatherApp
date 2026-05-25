@@ -2,6 +2,14 @@
 
 A simple Flask app that lets a user enter a city and displays the current weather with an icon.
 
+## Security note
+
+Do NOT commit `.env` or other files containing secrets. If a secret was committed by mistake:
+
+1. Revoke/rotate the exposed secret immediately (OpenWeatherMap API key in your case).
+2. Remove the file from the repository and history.
+3. Update your CI or deployment to use repository-level secrets or environment variables.
+
 ## Setup
 
 1. Install dependencies:
